@@ -1,0 +1,2 @@
+module Vivid
+end
