@@ -125,6 +125,8 @@ module Vivid
         subject.rotate(90, 0, 1, 0)
 
         builder = PBRT::Builder.new
+
+        subject.next_frame
         subject.build_pbrt(builder)
 
         expect(builder.to_s).to eq(<<~PBRT)

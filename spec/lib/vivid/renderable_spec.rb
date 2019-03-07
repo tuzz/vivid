@@ -8,15 +8,35 @@ module Vivid
       attr_accessor :attributes
     end
 
-    it "defines the #build_pbrt method" do
+    it "defines the #build_pbrt and #next_frame methods" do
       subject = RenderableTest.new
+
       expect(subject).to respond_to(:build_pbrt)
+      expect(subject).to respond_to(:next_frame)
+    end
+
+    it "errors if #build_pbrt is called before #next_frame" do
+      subject = RenderableTest.new
+      builder = PBRT::Builder.new
+
+      expect { subject.build_pbrt(builder) }.to raise_error(SequenceError)
+    end
+
+    it "errors if #build_pbrt is called twice in a row without #next_frame" do
+      subject = RenderableTest.new
+      builder = PBRT::Builder.new
+
+      subject.next_frame
+      subject.build_pbrt(builder)
+
+      expect { subject.build_pbrt(builder) }.to raise_error(SequenceError)
     end
 
     it "calls the a method for each render name on the build_pbrt builder" do
       subject = RenderableTest.new
       builder = PBRT::Builder.new
 
+      subject.next_frame
       subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
@@ -29,6 +49,8 @@ module Vivid
       builder = PBRT::Builder.new
 
       subject.attributes = { radius: 1 }
+
+      subject.next_frame
       subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
@@ -57,6 +79,8 @@ module Vivid
       builder = PBRT::Builder.new
 
       subject.name = "mytexture"
+
+      subject.next_frame
       subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
@@ -79,6 +103,7 @@ module Vivid
       subject.xy = [1, 2]
       subject.z = 3
 
+      subject.next_frame
       subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
@@ -99,6 +124,8 @@ module Vivid
       builder = PBRT::Builder.new
 
       subject.my_attributes = { radius: 1 }
+
+      subject.next_frame
       subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
@@ -111,21 +138,22 @@ module Vivid
 
       render_as :shape, :sphere
 
-      attr_accessor :attributes
+      attr_accessor :attributes, :something
 
-      before_render :foo, :bar
+      before_frame :foo
+      before_render :bar
       after_render :baz
 
-      def foo(builder)
-        builder.translate(1, 1, 1)
+      def foo
+        self.something = true
       end
 
       def bar(builder)
-        builder.translate(2, 2, 2)
+        builder.translate(1, 1, 1)
       end
 
       def baz(builder)
-        builder.translate(3, 3, 3)
+        builder.translate(2, 2, 2)
       end
     end
 
@@ -133,13 +161,16 @@ module Vivid
       subject = RenderableTest5.new
       builder = PBRT::Builder.new
 
+      expect(subject.something).to be_falsey
+      subject.next_frame
+      expect(subject.something).to be_truthy
+
       subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
         Translate 1 1 1
-        Translate 2 2 2
         Shape "sphere"
-        Translate 3 3 3
+        Translate 2 2 2
       PBRT
     end
 
@@ -151,7 +182,9 @@ module Vivid
       subject = RenderableTest6.new
       builder = PBRT::Builder.new
 
+      subject.next_frame
       subject.build_pbrt(builder)
+
       expect(builder.to_s).to eq("")
     end
 
@@ -174,6 +207,7 @@ module Vivid
       subject = RenderableTest7.new
       builder = PBRT::Builder.new
 
+      subject.next_frame
       subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)

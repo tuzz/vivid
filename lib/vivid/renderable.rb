@@ -4,7 +4,17 @@ module Vivid
       klass.extend(ClassMethods)
     end
 
+    def next_frame
+      @next_frame = true
+
+      self.class.before_frame.each { |m| public_send(m) }
+    end
+
     def build_pbrt(builder)
+      unless @next_frame
+        raise SequenceError, "#next_frame must be called before rendering #{self}"
+      end
+
       self.class.before_render.each { |m| public_send(m, builder) }
 
       # [:foo, :@bar, :baz] -> [[:foo, :@bar], [:baz]]
@@ -39,6 +49,8 @@ module Vivid
       end
 
       self.class.after_render.each { |m| public_send(m, builder) }
+
+      @next_frame = false
     end
 
     module ClassMethods
@@ -48,6 +60,11 @@ module Vivid
 
       def render_as(*names)
         @render_names = names
+      end
+
+      def before_frame(*methods)
+        @before_frame ||= []
+        @before_frame += methods
       end
 
       def before_render(*methods)
@@ -60,5 +77,8 @@ module Vivid
         @after_render += methods
       end
     end
+  end
+
+  class SequenceError < StandardError
   end
 end
