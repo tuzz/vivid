@@ -1,7 +1,5 @@
-module Vivid
-end
+$LOAD_PATH.push(".")
 
 require "pbrt"
 
-require "vivid/attributes"
-require "vivid/renderable"
+Dir.glob("{lib,app}/**/*.rb").each { |f| require f }
