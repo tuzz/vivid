@@ -10,12 +10,12 @@ module Vivid
       def transforms(*names)
         @transfom_names = names
 
-        define_translate_method if names.include?(:translate)
-        define_scale_method if names.include?(:scale)
-        define_rotate_method if names.include?(:rotate)
+        define_translate_methods if names.include?(:translate)
+        define_scale_methods if names.include?(:scale)
+        define_rotate_methods if names.include?(:rotate)
       end
 
-      def define_translate_method
+      def define_translate_methods
         define_method(:translate_transform) do
           @translate_transform ||= [0, 0, 0]
         end
@@ -25,9 +25,15 @@ module Vivid
           translate_transform[1] += y
           translate_transform[2] += z
         end
+
+        define_method(:render_translation) do |builder|
+          builder.translate(translate_transform)
+        end
+
+        before_render :render_translation if defined?(before_render)
       end
 
-      def define_scale_method
+      def define_scale_methods
         define_method(:scale_transform) do
           @scale_transform ||= [1, 1, 1]
         end
@@ -37,9 +43,15 @@ module Vivid
           scale_transform[1] *= y
           scale_transform[2] *= z
         end
+
+        define_method(:render_scale) do |builder|
+          builder.scale(scale_transform)
+        end
+
+        before_render :render_scale if defined?(before_render)
       end
 
-      def define_rotate_method
+      def define_rotate_methods
         define_method(:rotate_transform) do
           @rotate_transform ||= []
         end
@@ -55,6 +67,14 @@ module Vivid
 
           rotate_transform.last[0] %= 360
         end
+
+        define_method(:render_rotate) do |builder|
+          rotate_transform.each do |rotation|
+            builder.rotate(rotation)
+          end
+        end
+
+        before_render :render_rotate if defined?(before_render)
       end
     end
   end

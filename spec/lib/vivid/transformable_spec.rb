@@ -103,5 +103,37 @@ module Vivid
       expect(subject).not_to respond_to(:translate)
       expect(subject).not_to respond_to(:rotate)
     end
+
+    context "when the object is renderable" do
+      class TransformableTest3
+        include Renderable
+        include Transformable
+
+        render_as :shape, :sphere
+        transforms :translate, :scale, :rotate
+
+        def attributes
+          { radius: 1 }
+        end
+      end
+
+      it "renders the transforms before the object" do
+        subject = TransformableTest3.new
+
+        subject.translate(1, 2, 3)
+        subject.scale(4, 5, 6)
+        subject.rotate(90, 0, 1, 0)
+
+        builder = PBRT::Builder.new
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Translate 1 2 3
+          Scale 4 5 6
+          Rotate 90 0 1 0
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+    end
   end
 end
