@@ -8,16 +8,16 @@ module Vivid
       attr_accessor :attributes
     end
 
-    it "defines the #to_pbrt method" do
+    it "defines the #build_pbrt method" do
       subject = RenderableTest.new
-      expect(subject).to respond_to(:to_pbrt)
+      expect(subject).to respond_to(:build_pbrt)
     end
 
-    it "calls the a method for each render name on the to_pbrt builder" do
+    it "calls the a method for each render name on the build_pbrt builder" do
       subject = RenderableTest.new
       builder = PBRT::Builder.new
 
-      subject.to_pbrt(builder)
+      subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
         Shape "sphere"
@@ -29,7 +29,7 @@ module Vivid
       builder = PBRT::Builder.new
 
       subject.attributes = { radius: 1 }
-      subject.to_pbrt(builder)
+      subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
         Shape "sphere" "float radius" [1]
@@ -57,7 +57,7 @@ module Vivid
       builder = PBRT::Builder.new
 
       subject.name = "mytexture"
-      subject.to_pbrt(builder)
+      subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
         Texture "mytexture" "spectrum" "imagemap" "string filename" ["foo.png"]
@@ -79,7 +79,7 @@ module Vivid
       subject.xy = [1, 2]
       subject.z = 3
 
-      subject.to_pbrt(builder)
+      subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
         Translate 1 2 3
@@ -99,7 +99,7 @@ module Vivid
       builder = PBRT::Builder.new
 
       subject.my_attributes = { radius: 1 }
-      subject.to_pbrt(builder)
+      subject.build_pbrt(builder)
 
       expect(builder.to_s).to eq(<<~PBRT)
         Shape "sphere" "float radius" [1]

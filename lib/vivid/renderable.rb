@@ -4,7 +4,7 @@ module Vivid
       klass.extend(ClassMethods)
     end
 
-    def to_pbrt(builder)
+    def build_pbrt(builder)
       # [:foo, :@bar, :baz] -> [[:foo, :@bar], [:baz]]
       chunks = self.class.render_names.chunk_while do |a, b|
         b.to_s.start_with?("@")
