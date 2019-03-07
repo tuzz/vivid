@@ -142,5 +142,44 @@ module Vivid
         Translate 3 3 3
       PBRT
     end
+
+    class RenderableTest6
+      include Renderable
+    end
+
+    it "does not render if 'render_as' is not set" do
+      subject = RenderableTest6.new
+      builder = PBRT::Builder.new
+
+      subject.build_pbrt(builder)
+      expect(builder.to_s).to eq("")
+    end
+
+    class RenderableTest7
+      include Renderable
+
+      before_render :foo
+      after_render :bar
+
+      def foo(builder)
+        builder.translate(1, 1, 1)
+      end
+
+      def bar(builder)
+        builder.translate(2, 2, 2)
+      end
+    end
+
+    it "still runs before and after hooks if 'render_as' is not set" do
+      subject = RenderableTest7.new
+      builder = PBRT::Builder.new
+
+      subject.build_pbrt(builder)
+
+      expect(builder.to_s).to eq(<<~PBRT)
+        Translate 1 1 1
+        Translate 2 2 2
+      PBRT
+    end
   end
 end

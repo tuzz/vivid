@@ -26,7 +26,7 @@ module Vivid
       end
 
       # If the last method doesn't take a specified argument:
-      unless chunks.last.size > 1
+      if chunks.last && chunks.last.size == 1
 
         # Set its argument to the remainder of the attributes hash:
         remainder = (attributes || {}).reject { |k, _| args.include?(k) }
@@ -42,7 +42,9 @@ module Vivid
     end
 
     module ClassMethods
-      attr_reader :render_names
+      def render_names
+        @render_names ||= []
+      end
 
       def render_as(*names)
         @render_names = names
