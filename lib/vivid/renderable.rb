@@ -5,6 +5,8 @@ module Vivid
     end
 
     def build_pbrt(builder)
+      self.class.before_render.each { |m| public_send(m, builder) }
+
       # [:foo, :@bar, :baz] -> [[:foo, :@bar], [:baz]]
       chunks = self.class.render_names.chunk_while do |a, b|
         b.to_s.start_with?("@")
@@ -35,6 +37,8 @@ module Vivid
       chunks.inject(builder) do |builder, (method, *args)|
         builder.public_send(method, *args)
       end
+
+      self.class.after_render.each { |m| public_send(m, builder) }
     end
 
     module ClassMethods
@@ -42,6 +46,16 @@ module Vivid
 
       def render_as(*names)
         @render_names = names
+      end
+
+      def before_render(*methods)
+        @before_render ||= []
+        @before_render += methods
+      end
+
+      def after_render(*methods)
+        @after_render ||= []
+        @after_render += methods
       end
     end
   end
