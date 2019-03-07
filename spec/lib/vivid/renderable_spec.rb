@@ -3,7 +3,7 @@ module Vivid
     class RenderableTest
       include Renderable
 
-      render :shape, :sphere
+      render_as :shape, :sphere
 
       attr_accessor :attributes
     end
@@ -43,7 +43,7 @@ module Vivid
     class RenderableTest2
       include Renderable
 
-      render :texture, :@name, :spectrum, :imagemap
+      render_as :texture, :@name, :spectrum, :imagemap
 
       def attributes
         { name: name, filename: "foo.png" }
@@ -67,7 +67,7 @@ module Vivid
     class RenderableTest3
       include Renderable
 
-      render :translate, :@xy, :@z
+      render_as :translate, :@xy, :@z
 
       attr_accessor :xy, :z
     end
@@ -89,7 +89,7 @@ module Vivid
     class RenderableTest4
       include Renderable
 
-      render :shape, :sphere, :@my_attributes
+      render_as :shape, :sphere, :@my_attributes
 
       attr_accessor :my_attributes
     end

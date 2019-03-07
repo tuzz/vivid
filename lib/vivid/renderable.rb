@@ -40,7 +40,7 @@ module Vivid
     module ClassMethods
       attr_reader :render_names
 
-      def render(*names)
+      def render_as(*names)
         @render_names = names
       end
     end
