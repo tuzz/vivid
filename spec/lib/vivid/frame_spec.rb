@@ -1,5 +1,25 @@
 module Vivid
   RSpec.describe Frame do
+    describe "#render" do
+      it "uses pbrt to render the frame to an image" do
+        file = Tempfile.new(["foo", ".png"])
+        film = Film.new(filename: file.path, xresolution: 50, yresolution: 50)
+
+        sphere = Sphere.new
+        light = PointLight.new
+
+        sphere.translate(0, 0, 2)
+        [film, sphere, light].each(&:next_frame)
+
+        subject = described_class.new([film], [sphere, light])
+        subject.render
+
+        expect(File.size(file.path)).to be > 500
+      ensure
+        file.unlink
+      end
+    end
+
     describe "#pbrt_file" do
       it "writes the scene description to a file and yields it" do
         sphere = Sphere.new

@@ -7,6 +7,10 @@ module Vivid
       self.world = world_definition
     end
 
+    def render
+      pbrt_file { |f| Exec.pbrt(path: f.path) }
+    end
+
     def pbrt_file
       Tempfile.create do |file|
         build_pbrt(PBRT::Builder.new(io: file))
