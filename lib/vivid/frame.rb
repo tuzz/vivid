@@ -1,5 +1,7 @@
 module Vivid
   class Frame
+    TEMPLATE = "frame-%08d.png"
+
     attr_accessor :options, :world
 
     def initialize(scene_options, world_definition)
@@ -9,6 +11,10 @@ module Vivid
 
     def render
       pbrt_file { |f| Exec.pbrt(path: f.path) }
+    end
+
+    def set_path(namespace, frame_number)
+      film.filename = "#{output_dir}/#{name(namespace)}/#{TEMPLATE}" % frame_number
     end
 
     def pbrt_file
@@ -34,6 +40,24 @@ module Vivid
             renderable.build_pbrt(builder)
           end
         end
+      end
+    end
+
+    private
+
+    def film
+      options.detect { |o| o.is_a?(Film) }
+    end
+
+    def output_dir
+      Vivid.config.output
+    end
+
+    def name(namespace)
+      if namespace.respond_to?(:name)
+        namespace.name
+      else
+        namespace.class.name.split("::").last
       end
     end
   end

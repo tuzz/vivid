@@ -2,3 +2,6 @@ config/*.yml
 
 !config/default.yml
 !config/test.yml
+
+output/
+test-output/

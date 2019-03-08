@@ -7,4 +7,5 @@ integrator: "path"
 sampler: "halton"
 resolution: [960, 540]
 pixelsamples: 4
-filename: "render.png"
+output: "output"
+filename: "output/render.png"
