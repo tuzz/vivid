@@ -235,5 +235,29 @@ module Vivid
           .to(true)
       end
     end
+
+    class SceneTest < Scene
+      def description
+        add Sphere.new.translate(0, 0, 2)
+        add PointLight.new
+
+        play Wait.new(1)
+      end
+    end
+
+    describe "#render" do
+      let(:path) { "test-output/SceneTest" }
+
+      before { FileUtils.rm_rf(path) }
+
+      it "renders the frames of the scene" do
+        expect { SceneTest.new.render }
+          .to change { Dir.glob("#{path}/*.png").count }
+          .from(0)
+          .to(6)
+      end
+
+      pending "creates a video by stitching the frames together"
+    end
   end
 end

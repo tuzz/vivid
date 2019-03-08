@@ -15,6 +15,10 @@ module Vivid
       self.class.name.split("::").last
     end
 
+    def description
+      raise NotImplementedError
+    end
+
     def set(object)
       options[object.option_type] = object
       object.next_frame
@@ -29,6 +33,16 @@ module Vivid
 
     def play(animation)
       animations << animation
+    end
+
+    def render
+      description
+
+      until finished?
+        next_frame
+        update_animation
+        render_frame
+      end
     end
 
     def finished?
