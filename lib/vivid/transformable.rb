@@ -5,10 +5,11 @@ module Vivid
     end
 
     module ClassMethods
-      attr_reader :transfom_names
+      attr_reader :transform_names
 
       def transforms(*names)
-        @transfom_names = names
+        @transform_names ||= []
+        @transform_names += names
 
         define_translate_methods if names.include?(:translate)
         define_scale_methods if names.include?(:scale)

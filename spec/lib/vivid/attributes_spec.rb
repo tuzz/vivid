@@ -35,5 +35,23 @@ module Vivid
     it "defines a method on the class to get the attribute names" do
       expect(AttributesTest.attribute_names).to eq [:foo, :bar]
     end
+
+    class AttributesTest2
+      include Attributes
+
+      attributes :foo
+      attributes :bar
+    end
+
+    it "can define attributes separately" do
+      expect(AttributesTest2.attribute_names).to eq [:foo, :bar]
+    end
+
+    class AttributesTest3 < AttributesTest2
+    end
+
+    pending "it works with inheritance" do
+      expect(AttributesTest3.attribute_names).to eq [:foo, :bar]
+    end
   end
 end

@@ -243,5 +243,7 @@ module Vivid
         Translate 2 2 2
       PBRT
     end
+
+    pending "it works with inheritance"
   end
 end

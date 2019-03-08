@@ -21,7 +21,7 @@ module Vivid
     end
 
     it "defines a method on the class to get the transform names" do
-      expect(TransformableTest.transfom_names).to eq [:translate, :scale, :rotate]
+      expect(TransformableTest.transform_names).to eq [:translate, :scale, :rotate]
     end
 
     describe "#translate" do
@@ -319,6 +319,24 @@ module Vivid
 
       expect(subject).not_to respond_to(:translate)
       expect(subject).not_to respond_to(:rotate)
+    end
+
+    class TransformableTest3
+      include Transformable
+
+      transforms :translate
+      transforms :scale
+    end
+
+    it "can define transforms separately" do
+      expect(TransformableTest3.transform_names).to eq [:translate, :scale]
+    end
+
+    class TransformableTest4 < TransformableTest3
+    end
+
+    pending "it works with inheritance" do
+      expect(TransformableTest4.transform_names).to eq [:translate, :scale]
     end
   end
 end

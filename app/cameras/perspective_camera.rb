@@ -1,4 +1,5 @@
 class PerspectiveCamera < Vivid::Camera
-  attributes :frameaspectratio, :screenwindow
+  attributes :shutteropen, :shutterclose, :frameaspectratio, :screenwindow
   render_as :camera, :perspective
+  transforms :translate
 end

@@ -3,7 +3,5 @@ module Vivid
     include Attributes
     include Renderable
     include Transformable
-
-    attributes :scale
   end
 end

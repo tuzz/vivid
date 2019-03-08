@@ -3,8 +3,5 @@ module Vivid
     include Attributes
     include Renderable
     include Transformable
-
-    attributes :shutteropen, :shutterclose
-    transforms :translate
   end
 end

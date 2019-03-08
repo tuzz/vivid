@@ -20,7 +20,8 @@ module Vivid
       attr_reader :attribute_names
 
       def attributes(*names)
-        @attribute_names = names
+        @attribute_names ||= []
+        @attribute_names += names
 
         attr_accessor(*names)
       end

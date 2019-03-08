@@ -3,7 +3,5 @@ module Vivid
     include Attributes
     include Renderable
     include Transformable
-
-    transforms :translate, :rotate, :scale
   end
 end
