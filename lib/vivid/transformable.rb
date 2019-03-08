@@ -26,10 +26,30 @@ module Vivid
           translate_transform[2] += z
         end
 
-        define_method(:render_translation) do |builder|
-          builder.translate(translate_transform)
+        define_method(:previous_translate_transform) do
+          @previous_translate_transform ||= [0, 0, 0]
         end
 
+        define_method(:flush_translation) do
+          translate(*previous_translate_transform)
+
+          @previous_translate_transform = @translate_transform
+          @translate_transform = [0, 0, 0]
+        end
+
+        define_method(:render_translation) do |builder|
+          unless previous_translate_transform == [0, 0, 0]
+            builder.translate(previous_translate_transform)
+          end
+
+          unless translate_transform == [0, 0, 0]
+            builder.active_transform(:EndTime)
+            builder.translate(translate_transform)
+            builder.active_transform(:All)
+          end
+        end
+
+        before_frame :flush_translation if defined?(before_frame)
         before_render :render_translation if defined?(before_render)
       end
 
@@ -44,10 +64,30 @@ module Vivid
           scale_transform[2] *= z
         end
 
-        define_method(:render_scale) do |builder|
-          builder.scale(scale_transform)
+        define_method(:previous_scale_transform) do
+          @previous_scale_transform ||= [1, 1, 1]
         end
 
+        define_method(:flush_scale) do
+          scale(*previous_scale_transform)
+
+          @previous_scale_transform = @scale_transform
+          @scale_transform = [1, 1, 1]
+        end
+
+        define_method(:render_scale) do |builder|
+          unless previous_scale_transform == [1, 1, 1]
+            builder.scale(previous_scale_transform)
+          end
+
+          unless scale_transform == [1, 1, 1]
+            builder.active_transform(:EndTime)
+            builder.scale(scale_transform)
+            builder.active_transform(:All)
+          end
+        end
+
+        before_frame :flush_scale if defined?(before_frame)
         before_render :render_scale if defined?(before_render)
       end
 
@@ -68,12 +108,34 @@ module Vivid
           rotate_transform.last[0] %= 360
         end
 
+        define_method(:previous_rotate_transform) do
+          @previous_rotate_transform ||= []
+        end
+
+        define_method(:flush_rotate) do
+          rotate_transform.reverse!
+
+          previous_rotate_transform.reverse.each do |rotation|
+            rotate(*rotation)
+          end
+
+          @previous_rotate_transform = rotate_transform.reverse
+          @rotate_transform = []
+        end
+
         define_method(:render_rotate) do |builder|
-          rotate_transform.each do |rotation|
-            builder.rotate(rotation)
+          unless previous_rotate_transform == []
+            previous_rotate_transform.each { |r| builder.rotate(r) }
+          end
+
+          unless rotate_transform == []
+            builder.active_transform(:EndTime)
+            rotate_transform.each { |r| builder.rotate(r) }
+            builder.active_transform(:All)
           end
         end
 
+        before_frame :flush_rotate if defined?(before_frame)
         before_render :render_rotate if defined?(before_render)
       end
     end

@@ -2,8 +2,14 @@ module Vivid
   RSpec.describe Transformable do
     class TransformableTest
       include Transformable
+      include Renderable
 
       transforms :translate, :scale, :rotate
+      render_as :shape, :sphere
+
+      def attributes
+        { radius: 1 }
+      end
     end
 
     it "defines the transform methods" do
@@ -34,6 +40,74 @@ module Vivid
         subject.translate(1, 2, 3)
         expect(subject.translate_transform).to eq [2, 4, 6]
       end
+
+      it "renders the translation before the object" do
+        subject = TransformableTest.new
+        subject.translate(1, 2, 3)
+
+        builder = PBRT::Builder.new
+        subject.next_frame
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Translate 1 2 3
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "does not render any translations if the object isn't translated" do
+        subject = TransformableTest.new
+
+        builder = PBRT::Builder.new
+        subject.next_frame
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "supports animated translations" do
+        subject = TransformableTest.new
+
+        subject.translate(1, 2, 3)
+        subject.next_frame
+        subject.translate(4, 5, 6)
+
+        builder = PBRT::Builder.new
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Translate 1 2 3
+          ActiveTransform EndTime
+          Translate 4 5 6
+          ActiveTransform All
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "combines translations correctly between frames" do
+        subject = TransformableTest.new
+
+        subject.translate(1, 2, 3)
+        subject.next_frame
+
+        subject.translate(4, 5, 6)
+        subject.next_frame
+
+        subject.translate(7, 8, 9)
+
+        builder = PBRT::Builder.new
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Translate 5 7 9
+          ActiveTransform EndTime
+          Translate 7 8 9
+          ActiveTransform All
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
     end
 
     describe "#scale" do
@@ -51,6 +125,74 @@ module Vivid
 
         subject.scale(1, 2, 3)
         expect(subject.scale_transform).to eq [1, 4, 9]
+      end
+
+      it "renders the scale before the object" do
+        subject = TransformableTest.new
+        subject.scale(1, 2, 3)
+
+        builder = PBRT::Builder.new
+        subject.next_frame
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Scale 1 2 3
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "does not render any scales if the object isn't scaled" do
+        subject = TransformableTest.new
+
+        builder = PBRT::Builder.new
+        subject.next_frame
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "supports animated scales" do
+        subject = TransformableTest.new
+
+        subject.scale(1, 2, 3)
+        subject.next_frame
+        subject.scale(4, 5, 6)
+
+        builder = PBRT::Builder.new
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Scale 1 2 3
+          ActiveTransform EndTime
+          Scale 4 5 6
+          ActiveTransform All
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "combines scales correctly between frames" do
+        subject = TransformableTest.new
+
+        subject.scale(1, 2, 3)
+        subject.next_frame
+
+        subject.scale(4, 5, 6)
+        subject.next_frame
+
+        subject.scale(7, 8, 9)
+
+        builder = PBRT::Builder.new
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Scale 4 10 18
+          ActiveTransform EndTime
+          Scale 7 8 9
+          ActiveTransform All
+          Shape "sphere" "float radius" [1]
+        PBRT
       end
     end
 
@@ -89,6 +231,81 @@ module Vivid
         subject.rotate(-20, 1, 0, 0)
         expect(subject.rotate_transform).to eq [[350, 1, 0, 0]]
       end
+
+      it "renders the rotations before the object" do
+        subject = TransformableTest.new
+
+        subject.rotate(90, 1, 0, 0)
+        subject.rotate(45, 0, 1, 0)
+
+        builder = PBRT::Builder.new
+        subject.next_frame
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Rotate 90 1 0 0
+          Rotate 45 0 1 0
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "does not render any rotations if the object isn't rotated" do
+        subject = TransformableTest.new
+
+        builder = PBRT::Builder.new
+        subject.next_frame
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "supports animated rotations" do
+        subject = TransformableTest.new
+
+        subject.rotate(90, 1, 0, 0)
+        subject.next_frame
+        subject.rotate(45, 0, 1, 0)
+
+        builder = PBRT::Builder.new
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Rotate 90 1 0 0
+          ActiveTransform EndTime
+          Rotate 45 0 1 0
+          ActiveTransform All
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
+
+      it "combines rotations correctly between frames" do
+        subject = TransformableTest.new
+
+        subject.rotate(90, 1, 0, 0)
+        subject.next_frame
+
+        subject.rotate(45, 0, 1, 0)
+        subject.next_frame
+
+        subject.rotate(45, 0, 1, 0)
+        subject.next_frame
+
+        subject.rotate(45, 0, 1, 0)
+
+        builder = PBRT::Builder.new
+        subject.build_pbrt(builder)
+
+        expect(builder.to_s).to eq(<<~PBRT)
+          Rotate 90 1 0 0
+          Rotate 90 0 1 0
+          ActiveTransform EndTime
+          Rotate 45 0 1 0
+          ActiveTransform All
+          Shape "sphere" "float radius" [1]
+        PBRT
+      end
     end
 
     class TransformableTest2
@@ -102,40 +319,6 @@ module Vivid
 
       expect(subject).not_to respond_to(:translate)
       expect(subject).not_to respond_to(:rotate)
-    end
-
-    context "when the object is renderable" do
-      class TransformableTest3
-        include Renderable
-        include Transformable
-
-        render_as :shape, :sphere
-        transforms :translate, :scale, :rotate
-
-        def attributes
-          { radius: 1 }
-        end
-      end
-
-      it "renders the transforms before the object" do
-        subject = TransformableTest3.new
-
-        subject.translate(1, 2, 3)
-        subject.scale(4, 5, 6)
-        subject.rotate(90, 0, 1, 0)
-
-        builder = PBRT::Builder.new
-
-        subject.next_frame
-        subject.build_pbrt(builder)
-
-        expect(builder.to_s).to eq(<<~PBRT)
-          Translate 1 2 3
-          Scale 4 5 6
-          Rotate 90 0 1 0
-          Shape "sphere" "float radius" [1]
-        PBRT
-      end
     end
   end
 end
