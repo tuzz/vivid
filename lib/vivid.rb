@@ -9,6 +9,7 @@ require "vivid/renderable"
 require "vivid/transformable"
 
 require "vivid/config"
+require "vivid/exec"
 require "vivid/frame"
 
 require "vivid/camera"
