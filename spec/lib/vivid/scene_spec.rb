@@ -4,15 +4,12 @@ module Vivid
       it "sets the scene options from global config" do
         options = subject.options.values
 
+        expect(options).to include(TransformTimes)
         expect(options).to include(PerspectiveCamera)
         expect(options).to include(HaltonSampler)
         expect(options).to include(BoxFilter)
         expect(options).to include(PathIntegrator)
         expect(options).to include(BvhAccelerator)
-      end
-
-      it "sets the frame rate from global config" do
-        expect(subject.frame_rate).to eq(Vivid.config.frame_rate)
       end
     end
 
@@ -111,11 +108,11 @@ module Vivid
     end
 
     describe "#frame_duration" do
-      it "is based on the frame rate" do
-        subject.frame_rate = 10
+      it "delegates to the TransformTimes option" do
+        subject.set TransformTimes.new(frame_rate: 10)
         expect(subject.frame_duration).to eq(0.1)
 
-        subject.frame_rate = 20
+        subject.set TransformTimes.new(frame_rate: 20)
         expect(subject.frame_duration).to eq(0.05)
       end
     end

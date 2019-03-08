@@ -1,6 +1,6 @@
 module Vivid
   class Scene
-    attr_accessor :options, :world, :animations, :frame_rate
+    attr_accessor :options, :world, :animations
 
     def initialize
       self.options = {}
@@ -8,7 +8,6 @@ module Vivid
       self.animations = []
 
       set_options_from_config
-      set_frame_rate_from_config
     end
 
     def name
@@ -30,11 +29,8 @@ module Vivid
       animations << animation
     end
 
-    def frame_duration
-      1.0 / frame_rate
-    end
-
     def set_options_from_config
+      set TransformTimes.from_config
       set Camera.from_config
       set Sampler.from_config
       set Film.from_config
@@ -43,8 +39,8 @@ module Vivid
       set Accelerator.from_config
     end
 
-    def set_frame_rate_from_config
-      self.frame_rate = Vivid.config.frame_rate
+    def frame_duration
+      options.fetch(:transform_times).frame_duration
     end
   end
 end
