@@ -1,5 +1,7 @@
 ---
 pbrt_flags: "--quiet"
+ffmpeg_in_flags: "-y -v 0"
+ffmpeg_out_flags: "-vcodec libx264 -crf 0 -preset veryfast"
 accelerator: "bvh"
 camera: "perspective"
 filter: "box"
