@@ -6,6 +6,8 @@ require "vivid/attributes"
 require "vivid/renderable"
 require "vivid/transformable"
 
+require "vivid/frame"
+
 require "vivid/camera"
 require "vivid/light"
 require "vivid/shape"
