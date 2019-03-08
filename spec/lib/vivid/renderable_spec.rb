@@ -58,6 +58,20 @@ module Vivid
       PBRT
     end
 
+    it "removes nil values from the attributes passed to the final method" do
+      subject = RenderableTest.new
+      builder = PBRT::Builder.new
+
+      subject.attributes = { radius: nil }
+
+      subject.next_frame
+      subject.build_pbrt(builder)
+
+      expect(builder.to_s).to eq(<<~PBRT)
+        Shape "sphere"
+      PBRT
+    end
+
     it "defines a method on the class to get the render names" do
       expect(RenderableTest.render_names).to eq [:shape, :sphere]
     end
@@ -130,6 +144,20 @@ module Vivid
 
       expect(builder.to_s).to eq(<<~PBRT)
         Shape "sphere" "float radius" [1]
+      PBRT
+    end
+
+    it "removes nil values from the custom attributes" do
+      subject = RenderableTest4.new
+      builder = PBRT::Builder.new
+
+      subject.my_attributes = { radius: nil }
+
+      subject.next_frame
+      subject.build_pbrt(builder)
+
+      expect(builder.to_s).to eq(<<~PBRT)
+        Shape "sphere"
       PBRT
     end
 

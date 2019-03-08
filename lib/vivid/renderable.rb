@@ -39,8 +39,14 @@ module Vivid
       if chunks.last && chunks.last.size == 1
 
         # Set its argument to the remainder of the attributes hash:
-        remainder = (attributes || {}).reject { |k, _| args.include?(k) }
-        chunks.last.push(remainder)
+        chunks.last << (attributes || {}).reject { |k, _| args.include?(k) }
+      end
+
+      # If the last argument is a hash:
+      if chunks.last && chunks.last.last.is_a?(Hash)
+
+        # Remove nil values:
+        chunks.last.last.reject! { |_, v| v.nil? }
       end
 
       # Call a chain of methods on the builder:
