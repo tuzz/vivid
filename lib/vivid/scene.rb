@@ -1,5 +1,7 @@
 module Vivid
   class Scene
+    TEMPLATE = "_%s.mp4" # At the top of directory listing.
+
     attr_accessor :options, :world, :animations, :frame_number
 
     def initialize
@@ -43,6 +45,8 @@ module Vivid
         update_animation
         render_frame
       end
+
+      stitch_frames
     end
 
     def finished?
@@ -74,6 +78,13 @@ module Vivid
       frame.render
     end
 
+    def stitch_frames
+      input = Frame.template(name)
+      output = [Frame.directory(name), TEMPLATE % name].join("/")
+
+      Exec.ffmpeg(input: input, output: output, rate: frame_rate)
+    end
+
     def set_options_from_config
       set TransformTimes.from_config
       set Camera.from_config
@@ -82,6 +93,10 @@ module Vivid
       set Filter.from_config
       set Integrator.from_config
       set Accelerator.from_config
+    end
+
+    def frame_rate
+      options.fetch(:transform_times).frame_rate
     end
 
     def frame_duration

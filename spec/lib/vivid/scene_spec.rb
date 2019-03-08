@@ -117,6 +117,16 @@ module Vivid
       end
     end
 
+    describe "#frame_rate" do
+      it "delegates to the TransformTimes option" do
+        subject.set TransformTimes.new(frame_rate: 10)
+        expect(subject.frame_rate).to eq(10)
+
+        subject.set TransformTimes.new(frame_rate: 20)
+        expect(subject.frame_rate).to eq(20)
+      end
+    end
+
     describe "#frame_duration" do
       it "delegates to the TransformTimes option" do
         subject.set TransformTimes.new(frame_rate: 10)
@@ -257,7 +267,12 @@ module Vivid
           .to(6)
       end
 
-      pending "creates a video by stitching the frames together"
+      it "stitches the frames together to create a video" do
+        expect { SceneTest.new.render }
+          .to change { File.exist?("#{path}/_SceneTest.mp4") }
+          .from(false)
+          .to(true)
+      end
     end
   end
 end
