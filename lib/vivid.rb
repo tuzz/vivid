@@ -11,6 +11,7 @@ require "vivid/transformable"
 require "vivid/config"
 require "vivid/exec"
 require "vivid/frame"
+require "vivid/scene"
 
 require "vivid/camera"
 require "vivid/light"
