@@ -1,5 +1,17 @@
 module Vivid
   RSpec.describe Scene do
+    describe "#initialize" do
+      it "sets the scene options from global config" do
+        options = subject.options.values
+
+        expect(options).to include(PerspectiveCamera)
+        expect(options).to include(HaltonSampler)
+        expect(options).to include(BoxFilter)
+        expect(options).to include(PathIntegrator)
+        expect(options).to include(BvhAccelerator)
+      end
+    end
+
     describe "#add" do
       it "adds an object to the scene" do
         sphere = Sphere.new
@@ -47,10 +59,10 @@ module Vivid
         orthographic = OrthographicCamera.new
         subject.set(orthographic)
 
-        objects = subject.options.values
+        options = subject.options.values
 
-        expect(objects).not_to include(perspective)
-        expect(objects).to include(orthographic)
+        expect(options).not_to include(perspective)
+        expect(options).to include(orthographic)
       end
 
       it "does not override options of other types" do
@@ -60,10 +72,10 @@ module Vivid
         film = Film.new
         subject.set(film)
 
-        objects = subject.options.values
+        options = subject.options.values
 
-        expect(objects).to include(perspective)
-        expect(objects).to include(film)
+        expect(options).to include(perspective)
+        expect(options).to include(film)
       end
 
       it "errors if the object is not an option" do

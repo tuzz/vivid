@@ -6,5 +6,12 @@ module Vivid
     def option_type
       :accelerator
     end
+
+    def self.from_config
+      case Vivid.config.accelerator
+      when "bvh"
+        BvhAccelerator.new
+      end
+    end
   end
 end

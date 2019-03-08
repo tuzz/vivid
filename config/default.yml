@@ -1,2 +1,10 @@
 ---
 pbrt_flags: ""
+accelerator: "bvh"
+camera: "perspective"
+filter: "box"
+integrator: "path"
+sampler: "halton"
+resolution: [960, 540]
+pixelsamples: 4
+filename: "render.png"
