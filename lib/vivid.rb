@@ -13,8 +13,12 @@ require "vivid/exec"
 require "vivid/frame"
 require "vivid/scene"
 
+require "vivid/accelerator"
 require "vivid/camera"
+require "vivid/filter"
+require "vivid/integrator"
 require "vivid/light"
+require "vivid/sampler"
 require "vivid/shape"
 
 Dir.glob("app/**/*.rb").each { |f| require f }
