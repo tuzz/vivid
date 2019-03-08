@@ -1,10 +1,11 @@
 module Vivid
   class Scene
-    attr_accessor :options, :world
+    attr_accessor :options, :world, :animations
 
     def initialize
       self.options = {}
       self.world = {}
+      self.animations = []
 
       set_options_from_config
     end
@@ -18,6 +19,10 @@ module Vivid
 
       world[object] = true
       object.next_frame
+    end
+
+    def play(animation)
+      animations << animation
     end
 
     def set_options_from_config

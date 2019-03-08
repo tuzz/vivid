@@ -14,6 +14,7 @@ require "vivid/frame"
 require "vivid/scene"
 
 require "vivid/accelerator"
+require "vivid/animation"
 require "vivid/camera"
 require "vivid/filter"
 require "vivid/integrator"

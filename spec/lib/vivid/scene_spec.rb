@@ -84,5 +84,15 @@ module Vivid
         expect { subject.set(sphere) }.to raise_error(/option_type/)
       end
     end
+
+    describe "#play" do
+      it "adds an animation to the queue" do
+        sphere = Sphere.new
+        appear = Appear.new(sphere)
+
+        subject.play(appear)
+        expect(subject.animations).to eq [appear]
+      end
+    end
   end
 end
