@@ -1,4 +1,4 @@
-class PerspectiveCamera < Vivid::Camera
+class OrthographicCamera < Vivid::Camera
   attributes(
     :shutteropen,
     :shutterclose,
@@ -6,8 +6,6 @@ class PerspectiveCamera < Vivid::Camera
     :screenwindow,
     :lensradius,
     :focaldistance,
-    :fov,
-    :halffov,
   )
 
   render_as :camera, :perspective

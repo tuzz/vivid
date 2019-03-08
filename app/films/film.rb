@@ -12,4 +12,8 @@ class Film
     :diagonal,
     :filename,
   )
+
+  def option_type
+    :film
+  end
 end

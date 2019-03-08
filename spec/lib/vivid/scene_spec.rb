@@ -30,5 +30,47 @@ module Vivid
         sphere.build_pbrt(builder)
       end
     end
+
+    describe "#set" do
+      it "sets an option of the scene" do
+        camera = PerspectiveCamera.new
+
+        subject.set(camera)
+
+        expect(subject.options.values).to include(camera)
+      end
+
+      it "overrides an option of the same type" do
+        perspective = PerspectiveCamera.new
+        subject.set(perspective)
+
+        orthographic = OrthographicCamera.new
+        subject.set(orthographic)
+
+        objects = subject.options.values
+
+        expect(objects).not_to include(perspective)
+        expect(objects).to include(orthographic)
+      end
+
+      it "does not override options of other types" do
+        perspective = PerspectiveCamera.new
+        subject.set(perspective)
+
+        film = Film.new
+        subject.set(film)
+
+        objects = subject.options.values
+
+        expect(objects).to include(perspective)
+        expect(objects).to include(film)
+      end
+
+      it "errors if the object is not an option" do
+        sphere = Sphere.new
+
+        expect { subject.set(sphere) }.to raise_error(/option_type/)
+      end
+    end
   end
 end
