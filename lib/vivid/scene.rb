@@ -33,6 +33,18 @@ module Vivid
       animations.empty?
     end
 
+    def update_animation
+      return if finished?
+
+      animation = animations.first
+      animation.update(self)
+
+      if animation.finished?
+        animations.shift
+        update_animation
+      end
+    end
+
     def set_options_from_config
       set TransformTimes.from_config
       set Camera.from_config

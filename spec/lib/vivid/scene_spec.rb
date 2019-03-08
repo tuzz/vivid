@@ -14,13 +14,13 @@ module Vivid
     end
 
     describe "#name" do
-      class Scene::MyScene < Scene
+      class Scene::SceneTest < Scene
       end
 
       it "returns the name of the class without the namespace" do
-        subject = Scene::MyScene.new
+        subject = Scene::SceneTest.new
 
-        expect(subject.name).to eq("MyScene")
+        expect(subject.name).to eq("SceneTest")
       end
     end
 
@@ -124,6 +124,57 @@ module Vivid
 
         subject.animations.clear
         expect(subject).to be_finished
+      end
+    end
+
+    describe "#update_animation" do
+      class TestAnimation < Struct.new(:count)
+        def update(scene)
+          self.count ||= 0
+          self.count += 1
+        end
+
+        def finished?
+          count == 2
+        end
+      end
+
+      it "updates the first animation in the sequence" do
+        animation1 = TestAnimation.new
+        animation2 = TestAnimation.new
+
+        subject.animations = [animation1, animation2]
+        subject.update_animation
+
+        expect(animation1.count).to eq(1)
+        expect(animation2.count).to be_nil
+      end
+
+      it "removes an animation once it has finished" do
+        animation = TestAnimation.new
+        subject.animations = [animation]
+
+        subject.update_animation
+
+        expect(animation).not_to be_finished
+        expect(subject.animations).not_to be_empty
+
+        subject.update_animation
+
+        expect(subject.animations).to be_empty
+      end
+
+      it "starts the next animation as soon as one finishes" do
+        animation1 = TestAnimation.new
+        animation2 = TestAnimation.new
+
+        subject.animations = [animation1, animation2]
+
+        subject.update_animation
+        subject.update_animation
+
+        expect(animation1.count).to eq(2)
+        expect(animation2.count).to eq(1)
       end
     end
   end
