@@ -11,6 +11,10 @@ module Vivid
       set_frame_rate_from_config
     end
 
+    def name
+      self.class.name.split("::").last
+    end
+
     def set(object)
       options[object.option_type] = object
     end

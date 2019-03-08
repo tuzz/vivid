@@ -23,41 +23,19 @@ module Vivid
       let(:film) { Film.new }
       subject { described_class.new([film], []) }
 
-      class FrameTest
-      end
-
       it "sets the top-level directory from global config" do
-        subject.set_path(FrameTest.new, 3)
+        subject.set_path("Foo", 3)
         expect(film.filename).to start_with("test-output/")
       end
 
-      it "sets the sub-directory from the namespace's class" do
-        subject.set_path(FrameTest.new, 3)
-        expect(film.filename).to include("/FrameTest/")
+      it "sets the sub-directory from the namespace" do
+        subject.set_path("Foo", 3)
+        expect(film.filename).to include("/Foo/")
       end
 
       it "sets the filename from the frame number" do
-        subject.set_path(FrameTest.new, 3)
+        subject.set_path("Foo", 3)
         expect(film.filename).to include("/frame-00000003.png")
-      end
-
-      class FrameTest::FrameTest2
-      end
-
-      it "removes ancestors when it embeds the namespace's class" do
-        subject.set_path(FrameTest::FrameTest2.new, 3)
-        expect(film.filename).to include("/FrameTest2/")
-      end
-
-      class FrameTest3
-        def name
-          "my_custom_name"
-        end
-      end
-
-      it "uses the #name from the namespace if it has one" do
-        subject.set_path(FrameTest3.new, 3)
-        expect(film.filename).to eq("test-output/my_custom_name/frame-00000003.png")
       end
     end
 

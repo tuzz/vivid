@@ -16,6 +16,17 @@ module Vivid
       end
     end
 
+    describe "#name" do
+      class Scene::MyScene < Scene
+      end
+
+      it "returns the name of the class without the namespace" do
+        subject = Scene::MyScene.new
+
+        expect(subject.name).to eq("MyScene")
+      end
+    end
+
     describe "#add" do
       it "adds an object to the scene" do
         sphere = Sphere.new

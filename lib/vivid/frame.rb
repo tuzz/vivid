@@ -14,7 +14,7 @@ module Vivid
     end
 
     def set_path(namespace, frame_number)
-      film.filename = "#{output_dir}/#{name(namespace)}/#{TEMPLATE}" % frame_number
+      film.filename = "#{output_dir}/#{namespace}/#{TEMPLATE}" % frame_number
     end
 
     def pbrt_file
@@ -51,14 +51,6 @@ module Vivid
 
     def output_dir
       Vivid.config.output
-    end
-
-    def name(namespace)
-      if namespace.respond_to?(:name)
-        namespace.name
-      else
-        namespace.class.name.split("::").last
-      end
     end
   end
 end
