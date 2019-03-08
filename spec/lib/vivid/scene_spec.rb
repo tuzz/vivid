@@ -116,5 +116,15 @@ module Vivid
         expect(subject.frame_duration).to eq(0.05)
       end
     end
+
+    describe "#finished?" do
+      it "returns true when there are no animations left" do
+        subject.animations = [:foo]
+        expect(subject).not_to be_finished
+
+        subject.animations.clear
+        expect(subject).to be_finished
+      end
+    end
   end
 end

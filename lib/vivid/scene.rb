@@ -29,6 +29,10 @@ module Vivid
       animations << animation
     end
 
+    def finished?
+      animations.empty?
+    end
+
     def set_options_from_config
       set TransformTimes.from_config
       set Camera.from_config
