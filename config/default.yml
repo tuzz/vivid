@@ -6,6 +6,7 @@ filter: "box"
 integrator: "path"
 sampler: "halton"
 resolution: [960, 540]
+frame_rate: 30
 pixelsamples: 4
 output: "output"
 filename: "output/render.png"
