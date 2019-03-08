@@ -95,6 +95,16 @@ module Vivid
 
         expect { subject.set(sphere) }.to raise_error(/option_type/)
       end
+
+      it "calls #next_frame on the option when it is set" do
+        perspective = PerspectiveCamera.new
+        builder = PBRT::Builder.new
+
+        expect { perspective.build_pbrt(builder) }.to raise_error(SequenceError)
+
+        subject.set(perspective)
+        perspective.build_pbrt(builder)
+      end
     end
 
     describe "#play" do

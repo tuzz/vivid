@@ -16,6 +16,7 @@ module Vivid
 
     def set(object)
       options[object.option_type] = object
+      object.next_frame
     end
 
     def add(object)
