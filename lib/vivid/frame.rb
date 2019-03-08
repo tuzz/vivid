@@ -2,6 +2,14 @@ module Vivid
   class Frame
     TEMPLATE = "frame-%08d.png"
 
+    def self.template(namespace)
+      [self.directory(namespace), TEMPLATE].join("/")
+    end
+
+    def self.directory(namespace)
+      [Vivid.config.output, namespace].join("/")
+    end
+
     attr_accessor :options, :world
 
     def initialize(scene_options, world_definition)
@@ -16,7 +24,7 @@ module Vivid
     end
 
     def set_path(namespace, frame_number)
-      film.filename = "#{output_dir}/#{namespace}/#{TEMPLATE}" % frame_number
+      film.filename = self.class.template(namespace) % frame_number
     end
 
     def pbrt_file
@@ -53,10 +61,6 @@ module Vivid
 
     def film
       options.detect { |o| o.is_a?(Film) }
-    end
-
-    def output_dir
-      Vivid.config.output
     end
   end
 end

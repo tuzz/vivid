@@ -1,5 +1,21 @@
 module Vivid
   RSpec.describe Frame do
+    describe ".template" do
+      it "returns the filename template, prefixed with the directory" do
+        result = described_class.template("foo")
+
+        expect(result).to eq("test-output/foo/frame-%08d.png")
+      end
+    end
+
+    describe ".directory" do
+      it "returns the output directory from global config with the namespace" do
+        result = described_class.directory("foo")
+
+        expect(result).to eq("test-output/foo")
+      end
+    end
+
     describe "#render" do
       it "uses pbrt to render the frame to an image" do
         file = Tempfile.new(["foo", ".png"])
