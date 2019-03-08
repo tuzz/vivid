@@ -10,6 +10,8 @@ module Vivid
     end
 
     def render
+      ensure_directory_exists
+
       pbrt_file { |f| Exec.pbrt(path: f.path) }
     end
 
@@ -44,6 +46,10 @@ module Vivid
     end
 
     private
+
+    def ensure_directory_exists
+      FileUtils.mkdir_p(File.dirname(film.filename))
+    end
 
     def film
       options.detect { |o| o.is_a?(Film) }

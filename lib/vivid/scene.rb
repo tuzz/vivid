@@ -51,6 +51,12 @@ module Vivid
       end
     end
 
+    def render_frame
+      frame = Frame.new(options.values, world.keys)
+      frame.set_path(self.name, frame_number)
+      frame.render
+    end
+
     def set_options_from_config
       set TransformTimes.from_config
       set Camera.from_config

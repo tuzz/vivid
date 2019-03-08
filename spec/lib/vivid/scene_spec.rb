@@ -207,5 +207,21 @@ module Vivid
         expect { sphere.build_pbrt(builder) }.not_to raise_error
       end
     end
+
+    describe "#render_frame" do
+      let(:path) { "test-output/Scene/frame-00000001.png" }
+
+      before { FileUtils.rm_f(path) }
+
+      it "renders the current frame of the scene" do
+        subject.add Sphere.new.translate(0, 0, 2)
+        subject.add PointLight.new
+
+        expect { subject.render_frame }
+          .to change { File.exist?(path) }
+          .from(false)
+          .to(true)
+      end
+    end
   end
 end
