@@ -187,5 +187,25 @@ module Vivid
         expect(animation2.count).to eq(1)
       end
     end
+
+    describe "#next_frame" do
+      it "calls #next_frame on all objects" do
+        perspective = PerspectiveCamera.new
+        sphere = Sphere.new
+
+        subject.set perspective
+        subject.add sphere
+
+        builder = PBRT::Builder.new
+
+        perspective.build_pbrt(builder)
+        sphere.build_pbrt(builder)
+
+        subject.next_frame
+
+        expect { perspective.build_pbrt(builder) }.not_to raise_error
+        expect { sphere.build_pbrt(builder) }.not_to raise_error
+      end
+    end
   end
 end

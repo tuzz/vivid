@@ -34,6 +34,11 @@ module Vivid
       animations.empty?
     end
 
+    def next_frame
+      options.values.each(&:next_frame)
+      world.keys.each(&:next_frame)
+    end
+
     def update_animation
       return if finished?
 
