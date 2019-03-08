@@ -25,6 +25,8 @@ module Vivid
           translate_transform[0] += x
           translate_transform[1] += y
           translate_transform[2] += z
+
+          self
         end
 
         define_method(:previous_translate_transform) do
@@ -63,6 +65,8 @@ module Vivid
           scale_transform[0] *= x
           scale_transform[1] *= y
           scale_transform[2] *= z
+
+          self
         end
 
         define_method(:previous_scale_transform) do
@@ -107,6 +111,8 @@ module Vivid
           end
 
           rotate_transform.last[0] %= 360
+
+          self
         end
 
         define_method(:previous_rotate_transform) do

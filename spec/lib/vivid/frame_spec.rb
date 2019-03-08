@@ -5,10 +5,9 @@ module Vivid
         file = Tempfile.new(["foo", ".png"])
         film = Film.new(filename: file.path, xresolution: 50, yresolution: 50)
 
-        sphere = Sphere.new
+        sphere = Sphere.new.translate(0, 0, 2)
         light = PointLight.new
 
-        sphere.translate(0, 0, 2)
         [film, sphere, light].each(&:next_frame)
 
         subject = described_class.new([film], [sphere, light])
