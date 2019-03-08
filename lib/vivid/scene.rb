@@ -1,11 +1,12 @@
 module Vivid
   class Scene
-    attr_accessor :options, :world, :animations
+    attr_accessor :options, :world, :animations, :frame_number
 
     def initialize
       self.options = {}
       self.world = {}
       self.animations = []
+      self.frame_number = 0
 
       set_options_from_config
     end
@@ -35,6 +36,8 @@ module Vivid
     end
 
     def next_frame
+      self.frame_number += 1
+
       options.values.each(&:next_frame)
       world.keys.each(&:next_frame)
     end

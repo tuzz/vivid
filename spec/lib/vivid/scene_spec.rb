@@ -189,6 +189,16 @@ module Vivid
     end
 
     describe "#next_frame" do
+      it "increments the frame_number" do
+        expect(subject.frame_number).to eq(0)
+
+        subject.next_frame
+        expect(subject.frame_number).to eq(1)
+
+        subject.next_frame
+        expect(subject.frame_number).to eq(2)
+      end
+
       it "calls #next_frame on all objects" do
         perspective = PerspectiveCamera.new
         sphere = Sphere.new
@@ -216,6 +226,8 @@ module Vivid
       it "renders the current frame of the scene" do
         subject.add Sphere.new.translate(0, 0, 2)
         subject.add PointLight.new
+
+        subject.next_frame
 
         expect { subject.render_frame }
           .to change { File.exist?(path) }
