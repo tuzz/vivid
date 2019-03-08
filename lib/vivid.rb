@@ -1,6 +1,7 @@
 $LOAD_PATH.push(".")
 
 require "pbrt"
+require "tempfile"
 
 require "vivid/attributes"
 require "vivid/renderable"
