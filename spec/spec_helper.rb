@@ -6,3 +6,5 @@ RSpec.configure do |config|
   config.formatter = :doc
   config.color = true
 end
+
+Vivid.config.path = "config/test.yml"
