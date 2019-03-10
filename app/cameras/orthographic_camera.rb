@@ -8,6 +8,6 @@ class OrthographicCamera < Vivid::Camera
     :focaldistance,
   )
 
-  render_as :camera, :perspective
+  render_as :camera, :orthographic
   transforms :translate
 end
