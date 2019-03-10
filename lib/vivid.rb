@@ -12,6 +12,7 @@ require "vivid/config"
 require "vivid/exec"
 require "vivid/frame"
 require "vivid/scene"
+require "vivid/cache"
 
 require "vivid/accelerator"
 require "vivid/animation"

@@ -10,5 +10,9 @@ module Vivid
 
       system("ffmpeg -r #{rate} #{in_flags} -i #{input} #{out_flags} #{output}")
     end
+
+    def self.md5(path:)
+      `md5 -q #{path}`.strip
+    end
   end
 end

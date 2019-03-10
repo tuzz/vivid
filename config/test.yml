@@ -11,4 +11,5 @@ resolution: [240, 135]
 frame_rate: 5
 pixelsamples: 1
 output: "test-output"
+cache: "test-output/_cache"
 filename: "test-output/render.png"

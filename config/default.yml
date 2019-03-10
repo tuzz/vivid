@@ -11,4 +11,5 @@ resolution: [960, 540]
 frame_rate: 30
 pixelsamples: 4
 output: "output"
+cache: "output/_cache"
 filename: "output/render.png"

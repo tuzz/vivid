@@ -20,7 +20,11 @@ module Vivid
     def render
       ensure_directory_exists
 
-      pbrt_file { |f| Exec.pbrt(path: f.path) }
+      pbrt_file do |f|
+        cache_for(f.path).fetch do
+          Exec.pbrt(path: f.path)
+        end
+      end
     end
 
     def set_path(namespace, frame_number)
@@ -35,6 +39,10 @@ module Vivid
 
         yield file
       end
+    end
+
+    def cache_for(pbrt_path)
+      Cache.new(input_path: pbrt_path, output_path: film.filename)
     end
 
     def build_pbrt(builder)
