@@ -3,6 +3,7 @@ $LOAD_PATH.push(".")
 require "pbrt"
 require "tempfile"
 require "yaml"
+require "easing"
 
 require "vivid/mixins/attributes"
 require "vivid/mixins/renderable"
@@ -26,6 +27,8 @@ require "vivid/animation"
 require "vivid/cli"
 require "vivid/config"
 require "vivid/exec"
+
+require "ease"
 
 Vivid.config.path = "config/default.yml"
 
