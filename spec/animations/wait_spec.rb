@@ -5,17 +5,17 @@ RSpec.describe Wait do
   subject { described_class.new(seconds) }
 
   describe "#update" do
-    it "adds the frame_duration to seconds_waited after the first call" do
+    it "adds the frame_duration to elapsed after the first call" do
       d = scene.frame_duration
 
       subject.update(scene)
-      expect(subject.seconds_waited).to eq(0 * d)
+      expect(subject.elapsed).to eq(0 * d)
 
       subject.update(scene)
-      expect(subject.seconds_waited).to eq(1 * d)
+      expect(subject.elapsed).to eq(1 * d)
 
       subject.update(scene)
-      expect(subject.seconds_waited).to eq(2 * d)
+      expect(subject.elapsed).to eq(2 * d)
     end
   end
 

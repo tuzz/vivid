@@ -1,5 +1,5 @@
 class Wait < Vivid::Animation
-  attr_accessor :seconds, :seconds_waited, :strategy
+  attr_accessor :seconds, :elapsed, :strategy
 
   def initialize(seconds)
     if seconds.is_a?(Hash)
@@ -13,16 +13,16 @@ class Wait < Vivid::Animation
   def update(scene)
     duration = scene.frame_duration
 
-    if seconds_waited.nil?
-      self.seconds_waited = 0
+    if elapsed.nil?
+      self.elapsed = 0
     else
-      self.seconds_waited += duration
+      self.elapsed += duration
     end
 
     if strategy == :at_most
-      self.finished = seconds_waited + duration >= seconds
+      self.finished = elapsed + duration >= seconds
     else
-      self.finished = seconds_waited >= seconds
+      self.finished = elapsed >= seconds
     end
   end
 end
