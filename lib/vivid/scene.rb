@@ -40,6 +40,8 @@ module Vivid
     def render
       description
 
+      remove_stale_directory
+
       until finished?
         next_frame
         update_animation
@@ -47,6 +49,10 @@ module Vivid
       end
 
       stitch_frames
+    end
+
+    def remove_stale_directory
+      FileUtils.rm_rf(Frame.directory(self.name))
     end
 
     def finished?

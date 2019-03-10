@@ -273,6 +273,13 @@ module Vivid
           .from(false)
           .to(true)
       end
+
+      it "removes stale frames before rendering new ones" do
+        FileUtils.mkdir_p(path)
+        FileUtils.touch("#{path}/stale.png")
+
+        expect { SceneTest.new.render }
+      end
     end
   end
 end
