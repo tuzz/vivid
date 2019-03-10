@@ -24,7 +24,7 @@ module Vivid
 
       # [[_, :@bar], _] -> [[_, :bar], _]
       chunks = chunks.map do |method, *args|
-        [method, *args.map { |a| a.to_s[1..].to_sym }]
+        [method, *args.map { |a| a.to_s[1..-1].to_sym }]
       end
 
       # Get the names of all arguments:

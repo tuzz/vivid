@@ -104,7 +104,7 @@ module Vivid
         define_method(:rotate) do |degrees, x, y, z|
           previous = rotate_transform.last
 
-          if previous && previous[1..] == [x, y, z]
+          if previous && previous[1..-1] == [x, y, z]
             previous[0] += degrees
           else
             rotate_transform.push([degrees, x, y, z])

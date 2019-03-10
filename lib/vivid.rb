@@ -9,6 +9,7 @@ require "vivid/renderable"
 require "vivid/transformable"
 
 require "vivid/config"
+require "vivid/cli"
 require "vivid/exec"
 require "vivid/frame"
 require "vivid/scene"
@@ -25,6 +26,8 @@ require "vivid/sampler"
 require "vivid/shape"
 require "vivid/transform_times"
 
-Dir.glob("app/**/*.rb").each { |f| require f }
-
 Vivid.config.path = "config/default.yml"
+
+Dir.glob("app/**/*.rb").each do |file|
+  require file unless file.start_with?("app/scenes")
+end

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Build the container if it doesn't exist:
+if [[ "$(docker images -q vivid 2> /dev/null)" == "" ]]; then
+  docker build -t vivid .
+fi
+
+# Run the container, mount the directory, pass arguments through:
+docker run -v $(pwd):/vivid --rm -it vivid "$@"
