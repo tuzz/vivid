@@ -6,6 +6,7 @@ require "yaml"
 require "easing"
 
 require "vivid/mixins/attributes"
+require "vivid/mixins/materialistic"
 require "vivid/mixins/renderable"
 require "vivid/mixins/transformable"
 

@@ -3,5 +3,6 @@ module Vivid
     include Attributes
     include Renderable
     include Transformable
+    include Materialistic
   end
 end
