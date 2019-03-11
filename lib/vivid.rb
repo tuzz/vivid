@@ -18,6 +18,7 @@ require "vivid/pbrt/light"
 require "vivid/pbrt/material"
 require "vivid/pbrt/sampler"
 require "vivid/pbrt/shape"
+require "vivid/pbrt/texture"
 require "vivid/pbrt/transform_times"
 
 require "vivid/rendering/cache"
