@@ -7,9 +7,9 @@ camera: "perspective"
 filter: "box"
 integrator: "path"
 sampler: "halton"
-resolution: [960, 540]
-frame_rate: 30
-pixelsamples: 4
+resolution: [640, 360]
+frame_rate: 15
+pixelsamples: 1
 output: "output"
 cache: "output/_cache"
 filename: "output/render.png"
