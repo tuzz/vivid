@@ -10,12 +10,14 @@ module Vivid
 
     def self.from_config
       case Vivid.config.camera
-
-      when "perspective"
-        PerspectiveCamera.new
-
+      when "environment"
+        EnvironmentCamera.new
       when "orthographic"
         OrthographicCamera.new
+      when "perspective"
+        PerspectiveCamera.new
+      when "realistic"
+        RealisticCamera.new
       end
     end
   end

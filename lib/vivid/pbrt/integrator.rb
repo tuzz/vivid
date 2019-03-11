@@ -9,8 +9,18 @@ module Vivid
 
     def self.from_config
       case Vivid.config.integrator
+      when "bdtp"
+        BdtpIntegrator.new
+      when "directlighting"
+        DirectLightingIntegrator.new
+      when "mlt"
+        MltIntegrator.new
       when "path"
         PathIntegrator.new
+      when "sppm"
+        SppmIntegrator.new
+      when "whitted"
+        WhittedIntegrator.new
       end
     end
   end

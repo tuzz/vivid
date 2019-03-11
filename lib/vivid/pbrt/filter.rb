@@ -11,6 +11,14 @@ module Vivid
       case Vivid.config.filter
       when "box"
         BoxFilter.new
+      when "gaussian"
+        GaussianFilter.new
+      when "mitchell"
+        MitchellFilter.new
+      when "sinc"
+        SincFilter.new
+      when "triangle"
+        TriangleFilter.new
       end
     end
   end

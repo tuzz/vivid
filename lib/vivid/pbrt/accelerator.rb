@@ -11,6 +11,8 @@ module Vivid
       case Vivid.config.accelerator
       when "bvh"
         BvhAccelerator.new
+      when "kdtree"
+        KdTreeAccelerator.new
       end
     end
   end
