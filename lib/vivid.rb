@@ -30,6 +30,7 @@ require "vivid/animation"
 require "vivid/cli"
 require "vivid/config"
 require "vivid/exec"
+require "vivid/global"
 
 require "ease"
 
