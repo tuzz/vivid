@@ -11,5 +11,5 @@ class PerspectiveCamera < Vivid::Camera
   )
 
   render_as :camera, :perspective
-  transforms :translate
+  transforms :translate, :rotate
 end

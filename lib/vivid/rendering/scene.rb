@@ -27,7 +27,7 @@ module Vivid
     end
 
     def add(object)
-      return if world.key?(object)
+      return if world.key?(object) || object.respond_to?(:option_type)
 
       world[object] = true
       object.next_frame
