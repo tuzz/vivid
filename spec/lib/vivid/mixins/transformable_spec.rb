@@ -338,5 +338,33 @@ module Vivid
     pending "it works with inheritance" do
       expect(TransformableTest4.transform_names).to eq [:translate, :scale]
     end
+
+    class TransformableTest5
+      include Transformable
+      include Renderable
+
+      transforms :translate, :no_motion_blur
+
+      render_as :shape, :sphere
+
+      def attributes
+        { radius: 1 }
+      end
+    end
+
+    it "does not use separate transform times if no_motion_blur is set" do
+      subject = TransformableTest5.new
+
+      subject.next_frame
+      subject.translate(1, 2, 3)
+
+      builder = PBRT::Builder.new
+      subject.build_pbrt(builder)
+
+      expect(builder.to_s).to eq(<<~PBRT)
+        Translate 1 2 3
+        Shape "sphere" "float radius" [1]
+      PBRT
+    end
   end
 end

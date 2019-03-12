@@ -1,7 +1,7 @@
 class AreaLight < Vivid::Light
   attributes :shape, :L, :twosided, :samples
   render_as :area_light_source, :diffuse
-  transforms :translate, :rotate, :scale
+  transforms :translate, :rotate, :scale, :no_motion_blur
   after_render :render_shape
 
   def attributes

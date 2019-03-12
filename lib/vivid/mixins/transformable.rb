@@ -11,6 +11,8 @@ module Vivid
         @transform_names ||= []
         @transform_names += names
 
+        disable_animated_transforms if names.include?(:no_motion_blur)
+
         define_translate_methods if names.include?(:translate)
         define_scale_methods if names.include?(:scale)
         define_rotate_methods if names.include?(:rotate)
@@ -144,6 +146,16 @@ module Vivid
 
         before_frame :flush_rotate if defined?(before_frame)
         before_render :render_rotate if defined?(before_render)
+      end
+
+      def disable_animated_transforms
+        define_method(:flush_all_transforms) do |_|
+          flush_translation if defined?(flush_translation)
+          flush_scale if defined?(flush_scale)
+          flush_rotate if defined?(flush_rotate)
+        end
+
+        before_render :flush_all_transforms if defined?(before_render)
       end
     end
   end
